@@ -1,21 +1,9 @@
-import pytest
-from app import app
+from flask import Flask
+app = Flask(__name__)
 
-@pytest.fixture
-def client():
-    app.config['TESTING'] = True
-    with app.test_client() as client:
-        yield client
+@app.route('/')
+def hello():
+    return "Hello, World! 学号: 2440666138, 姓名: 林文强"
 
-def test_index_contains_title(client):
-    """测试首页包含学号和姓名"""
-    rv = client.get('/')
-    assert rv.status_code == 200
-    data = rv.data.decode('utf-8')
-    assert '学号' in data
-    assert '姓名' in data
-
-def test_health_check(client):
-    """健康检查接口返回健康信息"""
-    rv = client.get('/')
-    assert rv.status_code == 200
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
